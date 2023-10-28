@@ -4,6 +4,19 @@ var list3=document.getElementById('ul3');
 list1.addEventListener('click' ,removeElement);
 list2.addEventListener('click' ,removeElement);
 list3.addEventListener('click' ,removeElement);
+window.addEventListener("DOMContentLoaded",()=>{
+    axios.get('https://crudcrud.com/api/e38d7c6343954ae39345e8c04db42d13/products')
+    .then((res)=> {
+        console.log(res)
+
+        for(var i=0; i<res.data.length;i++){
+            showData(res.data[i])
+        }
+    })
+    .catch((err) =>{
+        console.log(err)
+    })
+})
  function addProduct(){
     var price_=document.getElementById('id1').value;
     var prod_=document.getElementById('id2').value;
@@ -16,16 +29,12 @@ list3.addEventListener('click' ,removeElement);
         category: categ_
     };
 
-    //  if(anonymousId == undefined){
-    //         axios.post('https://crudcrud.com/api/5aef32cd25fa40e890f39e99a1c808a1/appointments',myObj)
-    //        .then((res)=> console.log(res))
-    //        .catch((err)=> console.log(err)); 
-    //     }
-    //     else{
-    //         axios.put(`https://crudcrud.com/api/5aef32cd25fa40e890f39e99a1c808a1/appointments/${anonymousId}`,myObj)
-    //         .then((res)=> console.log(res))
-    //         .catch((err)=> console.log(err)); 
-    //     }
+    
+            axios.post('https://crudcrud.com/api/e38d7c6343954ae39345e8c04db42d13/products',myObj)
+           .then((res)=> console.log(res))
+           .catch((err)=> console.log(err)); 
+        
+        
     
     
     showData(myObj);
@@ -40,10 +49,10 @@ function showData(obj){
     delButton.className="btn btn-danger btn-sm delete";
      delButton.appendChild(document.createTextNode('Delete'));
     newList.appendChild(delButton);
-    if(obj.categ=='Electronic'){
+    if(obj.category=='Electronic'){
         list1.appendChild(newList);
     }
-    else if(obj.categ=='Food'){
+    else if(obj.category=='Food'){
         list2.appendChild(newList);
     }
     else{
@@ -58,6 +67,26 @@ function removeElement(e){
            
             var cat=li.textContent.split(" - ")[2];
 
+            axios.get('https://crudcrud.com/api/e38d7c6343954ae39345e8c04db42d13/products',{
+                params:{category:cat}
+            })
+            .then(
+                (res)=>{
+                    console.log(res);
+                    for(var i=0;i<res.data.length;i++){
+                        if(res.data[i].category==cat)
+                        axios
+                        .delete(`https://crudcrud.com/api/e38d7c6343954ae39345e8c04db42d13/products${res.data[i]._id}`)
+                        .then(res=>console.log(res))
+                        .catch(err=>console.log(err))
+                    }
+                }
+            )
+            .catch(
+                (err)=>console.log(err)
+                
+            )
+
             if(cat=='Electronic'){
                 list1.removeChild(li);
             }
@@ -69,25 +98,7 @@ function removeElement(e){
             }
             
            
-            // axios.get('https://crudcrud.com/api/5aef32cd25fa40e890f39e99a1c808a1/appointments',{
-            //     params:{email:email_}
-            // })
-            // .then(
-            //     (res)=>{
-            //         console.log(res);
-            //         for(var i=0;i<res.data.length;i++){
-            //             if(res.data[i].email==email_)
-            //             axios
-            //             .delete(`https://crudcrud.com/api/5aef32cd25fa40e890f39e99a1c808a1/appointments/${res.data[i]._id}`)
-            //             .then(res=>console.log(res))
-            //             .catch(err=>console.log(err))
-            //         }
-            //     }
-            // )
-            // .catch(
-            //     (err)=>console.log(err)
-                
-            // )
+           
             
             
             
