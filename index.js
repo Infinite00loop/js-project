@@ -66,17 +66,18 @@ function removeElement(e){
             var li=e.target.parentElement;
            
             var cat=li.textContent.split(" - ")[2];
+            var prod=li.textContent.split(" - ")[1];
 
             axios.get('https://crudcrud.com/api/e38d7c6343954ae39345e8c04db42d13/products',{
-                params:{category:cat}
+                params:{product:prod}
             })
             .then(
                 (res)=>{
                     console.log(res);
                     for(var i=0;i<res.data.length;i++){
-                        if(res.data[i].category==cat)
+                        if(res.data[i].product==prod)
                         axios
-                        .delete(`https://crudcrud.com/api/e38d7c6343954ae39345e8c04db42d13/products${res.data[i]._id}`)
+                        .delete(`https://crudcrud.com/api/e38d7c6343954ae39345e8c04db42d13/products/${res.data[i]._id}`)
                         .then(res=>console.log(res))
                         .catch(err=>console.log(err))
                     }
@@ -95,12 +96,7 @@ function removeElement(e){
             }
             else{
                 list3.removeChild(li);
-            }
-            
-           
-           
-            
-            
+            }  
             
         }
     }
